@@ -5,7 +5,7 @@ from lib.utils.tools import read_pkl
 from lib.utils.utils_data import split_clips
 
 class DataReaderMesh(object):
-    def __init__(self, n_frames, sample_stride, data_stride_train, data_stride_test, read_confidence=True, dt_root = 'data/mesh', dt_file = 'pw3d_det.pkl', res=[1920, 1920]):
+    def __init__(self, n_frames, sample_stride, data_stride_train, data_stride_test, read_confidence=True, dt_root = 'module/MotionBERT/data/mesh', dt_file = 'pw3d_det.pkl', res=[1920, 1920]):
         self.split_id_train = None
         self.split_id_test = None
         self.dt_dataset = read_pkl('%s/%s' % (dt_root, dt_file))

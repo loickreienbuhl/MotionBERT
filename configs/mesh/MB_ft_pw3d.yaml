@@ -27,7 +27,7 @@ att_fuse: True
 hidden_dim: 1024
 
 # Data
-data_root: data/mesh
+data_root: module/MotionBERT/data/mesh
 dt_file_h36m: mesh_det_h36m.pkl
 dt_file_coco: mesh_det_coco.pkl
 dt_file_pw3d: mesh_det_pw3d.pkl

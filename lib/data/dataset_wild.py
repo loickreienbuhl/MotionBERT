@@ -74,7 +74,11 @@ def read_input(json_path, vid_size, scale_range, focus):
         kpts = np.array(item['keypoints']).reshape([-1,3])
         kpts_all.append(kpts)
     kpts_all = np.array(kpts_all)
-    kpts_all = halpe2h36m(kpts_all)
+
+    ############# Not using AlphaPose Halpe 26 body keypoints
+    #kpts_all = halpe2h36m(kpts_all)
+    #############
+
     if vid_size:
         w, h = vid_size
         scale = min(w,h) / 2.0

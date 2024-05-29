@@ -27,8 +27,8 @@ from scipy.optimize import least_squares
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--config", type=str, default="configs/mesh/MB_ft_pw3d.yaml", help="Path to the config file.")
-    parser.add_argument('-e', '--evaluate', default='checkpoint/mesh/FT_MB_release_MB_ft_pw3d/best_epoch.bin', type=str, metavar='FILENAME', help='checkpoint to evaluate (file name)')
+    parser.add_argument("--config", type=str, default="module/MotionBERT/configs/mesh/MB_ft_pw3d.yaml", help="Path to the config file.")
+    parser.add_argument('-e', '--evaluate', default='module/MotionBERT/checkpoint/mesh/FT_MB_release_MB_ft_pw3d/best_epoch.bin', type=str, metavar='FILENAME', help='checkpoint to evaluate (file name)')
     parser.add_argument('-j', '--json_path', type=str, help='alphapose detection result json path')
     parser.add_argument('-v', '--vid_path', type=str, help='video path')
     parser.add_argument('-o', '--out_path', type=str, help='output path')
@@ -61,7 +61,7 @@ args = get_config(opts.config)
 # root_rel
 # args.rootrel = True
 
-smpl = SMPL(args.data_root, batch_size=1).cuda()
+smpl = SMPL(args.data_root, batch_size=1)
 J_regressor = smpl.J_regressor_h36m
 
 end = time.time()
@@ -78,17 +78,19 @@ if torch.cuda.is_available():
 chk_filename = opts.evaluate if opts.evaluate else opts.resume
 print('Loading checkpoint', chk_filename)
 checkpoint = torch.load(chk_filename, map_location=lambda storage, loc: storage)
+
+# take out module. prefix
+checkpoint['model'] = {k.replace('module.', ''): v for k, v in checkpoint['model'].items()}
+
 model.load_state_dict(checkpoint['model'], strict=True)
 model.eval()
 
 testloader_params = {
-        'batch_size': 1,
-        'shuffle': False,
-        'num_workers': 8,
-        'pin_memory': True,
-        'prefetch_factor': 4,
-        'persistent_workers': True,
-        'drop_last': False
+    'batch_size': 1,            # Set the batch size according to your requirements
+    'shuffle': False,           # Shuffle the data if needed, but it's usually not necessary for evaluation
+    'num_workers': 0,           # Use 0 workers for CPU-only execution to avoid multiprocessing
+    'pin_memory': False,        # Don't need to pin memory on CPU
+    'drop_last': False          # Keep all samples, even if the last batch is smaller
 }
 
 vid = imageio.get_reader(opts.vid_path,  'ffmpeg')
