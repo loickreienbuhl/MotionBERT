@@ -24,6 +24,6 @@ setup(
         'pytorch-metric-learning',
         'smplx[all]'
     ],
-    python_requires='>=3.8, <=3.9',
+    python_requires='>=3.8, <=3.10',
     include_package_data=True,
 )
