@@ -18,7 +18,7 @@ setup(
         'chumpy',
         'opencv-python',
         'imageio-ffmpeg',
-        'matplotlib==3.1.1',
+        'matplotlib',
         'roma',
         'ipdb',
         'pytorch-metric-learning',
